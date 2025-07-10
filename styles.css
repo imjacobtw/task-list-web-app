@@ -1,0 +1,138 @@
+:root {
+  --accent-primary: #578e7e;
+  --accent-secondary: #69a392;
+  --dark-primary: #3d3d3d;
+  --dark-secondary: #202020;
+  --light-primary: #fffaec;
+  --light-secondary: #f5ecd5;
+}
+
+* {
+  color: var(--dark-primary);
+  font-family: "Open Sans", sans-serif;
+  font-size: 18px;
+}
+
+body {
+  background-color: var(--light-primary);
+  margin: 0;
+  scrollbar-gutter: stable both-edges;
+  width: 100%;
+}
+
+#new-task-container {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  height: 15vh;
+  justify-content: center;
+  width: 100%;
+}
+
+#new-task-container > * {
+  border-radius: 10px;
+  padding: 12px;
+}
+
+#new-task-container > input {
+  background-color: var(--light-secondary);
+  border: none;
+  outline: 2px solid transparent;
+  margin-right: 10px;
+  transition: outline 150ms ease-in-out;
+  width: 500px;
+}
+
+#new-task-container > input:focus {
+  outline: 2px solid var(--accent-primary);
+}
+
+#new-task-container > button {
+  width: 100px;
+}
+
+#new-task-container > button:hover {
+  background-color: var(--accent-secondary);
+}
+
+button {
+  background-color: var(--accent-primary);
+  border: none;
+  border-radius: 10px;
+  color: var(--light-primary);
+  cursor: pointer;
+  transition: background-color 150ms ease-in-out;
+}
+
+button:hover {
+  background-color: var(--accent-secondary);
+}
+
+#tasks-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.task-row {
+  background-color: var(--light-secondary);
+  border-radius: 10px;
+  display: flex;
+  margin-bottom: 10px;
+  padding: 12px;
+  width: 70%;
+}
+
+.task-row > * {
+  padding: 12px;
+}
+
+.task-row > input {
+  background-color: transparent;
+  border: none;
+  border-radius: 10px;
+  flex-grow: 1;
+  margin: 0;
+  text-overflow: ellipsis;
+}
+
+.task-row > input:enabled {
+  background-color: var(--light-primary);
+  outline: 2px solid transparent;
+  transition: outline 150ms ease-in-out;
+}
+
+.task-row > input:enabled:focus {
+  outline: 2px solid var(--accent-primary);
+}
+
+.task-row > button {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 10px;
+}
+
+.task-row > button.edit {
+  background-color: #69585f;
+}
+
+.task-row > button.edit:hover {
+  background-color: #89737c;
+}
+
+.task-row > button.delete {
+  background-color: #ff5e5b;
+}
+
+.task-row > button.delete:hover {
+  background-color: #ff7e7b;
+}
+
+@media screen and (max-width: 1000px) {
+  .task-row {
+    width: 95%;
+  }
+}
