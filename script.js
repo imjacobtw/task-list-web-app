@@ -7,12 +7,18 @@ class Task {
 }
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) ?? [];
-const newTaskInputElement = document.querySelector("#new-task-container > input");
-const newTaskButtonElement = document.querySelector("#new-task-container > button");
-const tasksContainerElement = document.querySelector("#tasks-container");
+const newTaskInput = document.querySelector("#new-task-container > input");
+const newTaskButton = document.querySelector("#new-task-container > button");
+const tasksContainer = document.querySelector("#tasks-container");
 
-function addTaskToScreen(task) {
-  // <div class="task-row" id="<TASK_UUID>">
+function renderTasks() {
+  for (const task of tasks) {
+    renderTask(task);
+  }
+}
+
+function renderTask(task) {
+  // <div class="task" id="<TASK_UUID>">
   //   <input type="text" value="Eat dinner."></input>
   //   <button>Mark As Complete</button>
   //   <button class="edit">Edit</button>
@@ -20,73 +26,69 @@ function addTaskToScreen(task) {
   // </div>
 
   const newTaskContainer = document.createElement("div");
-  newTaskContainer.classList.add("task-row");
+  newTaskContainer.classList.add("task");
   newTaskContainer.setAttribute("id", task.id);
 
-  const newTaskInputElement = document.createElement("input");
-  newTaskInputElement.setAttribute("type", "text");
-  newTaskInputElement.setAttribute("value", task.description);
-  newTaskInputElement.setAttribute("disabled", true);
-  newTaskContainer.appendChild(newTaskInputElement);
+  const newTaskInput = document.createElement("input");
+  newTaskInput.setAttribute("type", "text");
+  newTaskInput.setAttribute("value", task.description);
+  newTaskInput.setAttribute("disabled", true);
 
-  const markAsCompleteButton = document.createElement("button");
-  changeTaskCompletionStyle(newTaskInputElement, markAsCompleteButton, task);
-  markAsCompleteButton.addEventListener("click", function () {
-    task.isCompleted = !task.isCompleted;
-    changeTaskCompletionStyle(newTaskInputElement, markAsCompleteButton, task);
-    editButton.disabled = !editButton.disabled;
-  });
-  newTaskContainer.appendChild(markAsCompleteButton);
+  const completionButton = document.createElement("button");
+  newTaskInput.style.textDecoration = task.isCompleted ? "line-through" : "none";
+  completionButton.textContent = task.isCompleted ? "Mark as Ongoing" : "Mark as Complete";
 
   const editButton = document.createElement("button");
+  editButton.disabled = task.isCompleted;
   editButton.textContent = "Edit";
   editButton.classList.add("edit");
-  editButton.addEventListener("click", function () {
-    newTaskInputElement.disabled = !newTaskInputElement.disabled;
-    editButton.textContent = newTaskInputElement.disabled ? "Edit" : "Save";
-    markAsCompleteButton.disabled = !markAsCompleteButton.disabled;
-
-    if (newTaskInputElement.disabled) {
-      const foundTask = tasks.find(currTask => currTask.id === task.id);
-      foundTask.description = newTaskInputElement.value;
-    }
-  });
-  newTaskContainer.append(editButton);
 
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "Delete";
   deleteButton.classList.add("delete");
+
+  completionButton.addEventListener("click", function () {
+    task.isCompleted = !task.isCompleted;
+    saveTasksToStorage();
+    newTaskInput.style.textDecoration = task.isCompleted ? "line-through" : "none";
+    completionButton.textContent = task.isCompleted ? "Mark as Ongoing" : "Mark as Complete";
+    editButton.disabled = task.isCompleted;
+  });
+
+  editButton.addEventListener("click", function () {
+    newTaskInput.disabled = !newTaskInput.disabled;
+    editButton.textContent = newTaskInput.disabled ? "Edit" : "Save";
+    completionButton.disabled = !completionButton.disabled;
+
+    if (newTaskInput.disabled) {
+      task.description = newTaskInput.value;
+      saveTasksToStorage();
+    }
+  });
+
   deleteButton.addEventListener("click", function () {
     newTaskContainer.remove();
     tasks = tasks.filter(currTask => currTask.id !== task.id);
+    saveTasksToStorage();
   });
-  newTaskContainer.append(deleteButton);
-
-  tasksContainerElement.appendChild(newTaskContainer);
+  
+  newTaskContainer.appendChild(newTaskInput);
+  newTaskContainer.appendChild(completionButton);
+  newTaskContainer.appendChild(editButton);
+  newTaskContainer.appendChild(deleteButton);
+  tasksContainer.appendChild(newTaskContainer);
 }
 
-function changeTaskCompletionStyle(taskInputElement, markAsCompleteButtonElement, task) {
-  taskInputElement.style.textDecoration = task.isCompleted
-    ? "line-through"
-    : "none";
-  markAsCompleteButtonElement.textContent = task.isCompleted
-    ? "Mark as Uncomplete"
-    : "Mark as Complete";
-}
-
-newTaskButtonElement.addEventListener("click", function () {
-  const newTask = new Task(newTaskInputElement.value);
-  newTaskInputElement.value = "";
-  tasks.push(newTask);
-  addTaskToScreen(newTask);
-});
-
-window.addEventListener("DOMContentLoaded", function () {
-  for (const task of tasks) {
-    addTaskToScreen(task);
-  }
-});
-
-window.addEventListener("beforeunload", function () {
+function saveTasksToStorage() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+newTaskButton.addEventListener("click", function () {
+  const newTask = new Task(newTaskInput.value);
+  newTaskInput.value = "";
+  tasks.push(newTask);
+  saveTasksToStorage();
+  renderTask(newTask);
 });
+
+window.addEventListener("DOMContentLoaded", renderTasks);

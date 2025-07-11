@@ -77,7 +77,7 @@ button:hover {
   width: 100%;
 }
 
-.task-row {
+.task {
   background-color: var(--light-secondary);
   border-radius: 10px;
   display: flex;
@@ -86,11 +86,11 @@ button:hover {
   width: 70%;
 }
 
-.task-row > * {
+.task > * {
   padding: 12px;
 }
 
-.task-row > input {
+.task > input {
   background-color: transparent;
   border: none;
   border-radius: 10px;
@@ -99,35 +99,35 @@ button:hover {
   text-overflow: ellipsis;
 }
 
-.task-row > input:enabled {
+.task > input:enabled {
   background-color: var(--light-primary);
   outline: 2px solid transparent;
   transition: outline 150ms ease-in-out;
 }
 
-.task-row > input:enabled:focus {
+.task > input:enabled:focus {
   outline: 2px solid var(--accent-primary);
 }
 
-.task-row > button {
+.task > button {
   padding-left: 20px;
   padding-right: 20px;
   margin-left: 10px;
 }
 
-.task-row > button.edit {
+.task > button.edit {
   background-color: #69585f;
 }
 
-.task-row > button.edit:hover {
+.task > button.edit:hover {
   background-color: #89737c;
 }
 
-.task-row > button.delete {
+.task > button.delete {
   background-color: #ff5e5b;
 }
 
-.task-row > button.delete:hover {
+.task > button.delete:hover {
   background-color: #ff7e7b;
 }
 
